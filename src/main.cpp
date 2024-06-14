@@ -78,9 +78,12 @@ static DWORD WINAPI DummyGetPrivateProfileStringA(
 		return result;
 	}
 	path.replace(path.begin() + pos, path.begin() + pos + label.size(), winlose[GetWinLose()]);
-	::strcpy_s(lpReturnedString, nSize, path.c_str());
-
+	strcpy_s(lpReturnedString, nSize, path.c_str());
+#ifdef _DEBUG
 	printf("replaced & saved %s\n", path.c_str());
+#endif
+
+	
 	return result;
 }
 
@@ -98,9 +101,9 @@ extern "C" __declspec(dllexport) bool Initialize(HMODULE hMyModule, HMODULE hPar
 	DWORD oldProtect;
 	//auto target = &SokuLib::DLL::kernel32.GetPrivateProfileStringA; //wrong
 	auto target = reinterpret_cast<pGPPSA*>(0x0085712C);
-	::VirtualProtect(target, 4, PAGE_READWRITE, &oldProtect);
+	VirtualProtect(target, 4, PAGE_READWRITE, &oldProtect);
 	*target = DummyGetPrivateProfileStringA;
-	::VirtualProtect(target, 4, oldProtect, &oldProtect);
+	VirtualProtect(target, 4, oldProtect, &oldProtect);
 	FlushInstructionCache(GetCurrentProcess(), nullptr, 0);
 #ifdef _DEBUG
 	printf("function at %#x hooked!\n", target);
