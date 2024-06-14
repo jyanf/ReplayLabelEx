@@ -176,7 +176,6 @@
     <ClCompile Include="sokulib\src\TextureManager.cpp" />
     <ClCompile Include="sokulib\src\VTables.cpp" />
     <ClCompile Include="sokulib\src\Weather.cpp" />
-    <ClCompile Include="sokulib\test\main.dll.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
