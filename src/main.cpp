@@ -9,7 +9,9 @@
 //#include <SokuLib.hpp>
 #include "../SokuLib/src/SokuLib.hpp"
 //#include "../SokuLib/src/DeprecatedElements.hpp"
+#define FILEVS_LIMIT 0x104
 #define isCL (SokuLib::mainMode == SokuLib::BATTLE_MODE_VSCLIENT)
+
 namespace Keys {
 	static const std::array<std::wstring, 5> BattleMode = {
 		L"vs_com", L"vs_loc", L"vs_net", L"spectate", L"other"
@@ -72,19 +74,16 @@ namespace Keys {
 	
 };
 
+static std::array<std::wstring, 2> Inis = { L"ReplayLabelEx.ini", L"CharacterNames.ini" };
 
-#define INI_NAMEC L"CharacterNames.ini"
 static bool GetChName(const std::vector<SokuLib::Character>& ChSerials, std::vector<std::wstring>& names)
 {//按角色编号取角色名（缩写）
-	wchar_t iniPath[MAX_PATH];
-	GetModuleFileNameW(NULL, iniPath, _countof(iniPath));
-	PathRemoveFileSpecW(iniPath);
-	PathAppendW(iniPath, INI_NAMEC);
+	auto iniPath = Inis[1].c_str();
 	//检查ini return false
 	if (!PathFileExistsW(iniPath))
 	{
 #ifdef _DEBUG
-		wprintf(L"%s not exist", iniPath);
+		wprintf(L"%s not exist\n", iniPath);
 #endif		
 		return false;
 	}
@@ -100,20 +99,14 @@ static bool GetChName(const std::vector<SokuLib::Character>& ChSerials, std::vec
 	return true;
 }
 
-
-#define INI_NAME L"ReplayNameExtension.ini"
-#define FILEVS_LIMIT 0x104
 static bool GetSubs(std::wstring& path, std::vector<std::wstring>& labels, std::vector<std::wstring>& subs)
 {//模块换标签，关键字换实值
-	wchar_t iniPath[MAX_PATH];
-	GetModuleFileNameW(NULL, iniPath, _countof(iniPath));
-	PathRemoveFileSpecW(iniPath);
-	PathAppendW(iniPath, INI_NAME);
+	auto iniPath = Inis[0].c_str();
 	//检查ini return false
 	if (!PathFileExistsW(iniPath))
 	{
 #ifdef _DEBUG
-		wprintf(L"%s not exist", iniPath);
+		wprintf(L"%s not exist\n", iniPath);
 #endif
 		return false;
 	}
@@ -121,8 +114,11 @@ static bool GetSubs(std::wstring& path, std::vector<std::wstring>& labels, std::
 	const DWORD maxsize = FILEVS_LIMIT;
 	LPWSTR const tempw = new wchar_t[maxsize];
 	//LPSTR const tempc = new char[maxsize];
-	const DWORD resultVs = GetPrivateProfileStringW(L"ReplayNameFormat", L"file_vs", NULL, tempw, maxsize, iniPath);
+	const DWORD resultVs = GetPrivateProfileStringW(L"PathFormat", L"file_vs", L"hello", tempw, maxsize, iniPath);
 	path = tempw;
+	wprintf(L"%s as %s", tempw, path.c_str());
+
+
 	//按模式展开
 	GetPrivateProfileStringW(L"BattleMode",		L"label",	L"%md",		tempw, maxsize, iniPath);
 	labels.push_back(tempw);
@@ -197,7 +193,7 @@ static DWORD WINAPI DummyGetPrivateProfileStringA(
 	puts("entering! ");
 #endif
 	
-	const DWORD result = GetPrivateProfileStringA(lpAppName, lpKeyName, lpDefault, lpReturnedString, nSize, lpFileName);
+	DWORD result = GetPrivateProfileStringA(lpAppName, lpKeyName, lpDefault, lpReturnedString, nSize, lpFileName);
 	if (std::string("replay") != lpAppName || std::string("file_vs") != lpKeyName)
 	{
 		return result;
@@ -232,23 +228,31 @@ static DWORD WINAPI DummyGetPrivateProfileStringA(
 	{
 		const unsigned int pos = path.find(labels[i]);
 		if (pos == std::wstring::npos) continue;
+		//printf("%S replacing %S\n", subs[i].c_str(), labels[i].c_str());
 		path.replace(path.begin() + pos, path.begin() + pos + labels[i].size(), subs[i]);
+		wprintf(path.c_str());
 	}
 	//if (WideCharToMultiByte(CP_ACP, 0, path.c_str(), -1, lpReturnedString, 0, NULL, NULL) > FILEVS_LIMIT) return result;
-	WideCharToMultiByte(CP_ACP, 0, path.c_str(), -1, lpReturnedString, FILEVS_LIMIT, NULL, NULL);
+	result = WideCharToMultiByte(CP_ACP, 0, path.c_str(), -1, lpReturnedString, FILEVS_LIMIT, NULL, NULL);
 	//strcpy_s(lpReturnedString, nSize, path.c_str());
 	
 #ifdef _DEBUG
 	printf("replaced & saved as \n%s\n", lpReturnedString);
 #endif
-
-	
 	return result;
 }
 
 typedef DWORD(__stdcall*  pGPPSA)(LPCSTR, LPCSTR, LPCSTR, LPSTR, DWORD, LPCSTR);
 extern "C" __declspec(dllexport) bool Initialize(HMODULE hMyModule, HMODULE hParentModule)
 {
+	wchar_t iniPath[MAX_PATH];
+	for (auto& ini : Inis)
+	{
+		GetModuleFileNameW(hMyModule, iniPath, _countof(iniPath));
+		PathRemoveFileSpecW(iniPath);
+		PathAppendW(iniPath, ini.c_str());
+		ini = iniPath;
+	}
 #ifdef _DEBUG
 	FILE* _;
 

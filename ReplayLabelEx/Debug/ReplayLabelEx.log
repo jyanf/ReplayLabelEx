@@ -32,29 +32,6 @@ C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(298,11): warn
   C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(298,11):
   默认构造函数或 copy/move 赋值运算符将忽略此成员
   
-C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\src\main.cpp(231,20): warning C4018: “<”: 有符号/无符号不匹配
-C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\src\main.cpp(268,9): warning C4477: “printf”: 格式字符串“%#x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“pGPPSA *”
-    正在创建库 D:\Games\Hisotensoku\th123\modules\ReplayLabelEx\ReplayLabelEx.lib 和对象 D:\Games\Hisotensoku\th123\modules\ReplayLabelEx\ReplayLabelEx.exp
-TextureManager.obj : warning LNK4099: 未找到 PDB“”(使用“TextureManager.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-Sprite.obj : warning LNK4099: 未找到 PDB“”(使用“Sprite.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-Profile.obj : warning LNK4099: 未找到 PDB“”(使用“Profile.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-Memory.obj : warning LNK4099: 未找到 PDB“”(使用“Memory.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-Hash.obj : warning LNK4099: 未找到 PDB“”(使用“Hash.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-WS2_32.DLL.obj : warning LNK4099: 未找到 PDB“”(使用“WS2_32.DLL.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-WINMM.DLL.obj : warning LNK4099: 未找到 PDB“”(使用“WINMM.DLL.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-USER32.DLL.obj : warning LNK4099: 未找到 PDB“”(使用“USER32.DLL.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-OLE32.DLL.obj : warning LNK4099: 未找到 PDB“”(使用“OLE32.DLL.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-KERNEL32.DLL.obj : warning LNK4099: 未找到 PDB“”(使用“KERNEL32.DLL.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-IMM32.DLL.obj : warning LNK4099: 未找到 PDB“”(使用“IMM32.DLL.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-IMAGEHLP.DLL.obj : warning LNK4099: 未找到 PDB“”(使用“IMAGEHLP.DLL.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-GDI32.DLL.obj : warning LNK4099: 未找到 PDB“”(使用“GDI32.DLL.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-D3DX9_33.DLL.obj : warning LNK4099: 未找到 PDB“”(使用“D3DX9_33.DLL.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-D3D9.DLL.obj : warning LNK4099: 未找到 PDB“”(使用“D3D9.DLL.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-DeprecatedElements.obj : warning LNK4099: 未找到 PDB“”(使用“DeprecatedElements.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-CharacterManager.obj : warning LNK4099: 未找到 PDB“”(使用“CharacterManager.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-Character.obj : warning LNK4099: 未找到 PDB“”(使用“Character.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-Cards.obj : warning LNK4099: 未找到 PDB“”(使用“Cards.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-BattleMode.obj : warning LNK4099: 未找到 PDB“”(使用“BattleMode.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-BattleManager.obj : warning LNK4099: 未找到 PDB“”(使用“BattleManager.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
-CMakeCXXCompilerId.obj : warning LNK4099: 未找到 PDB“”(使用“CMakeCXXCompilerId.obj”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\src\main.cpp(227,20): warning C4018: “<”: 有符号/无符号不匹配
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\src\main.cpp(272,9): warning C4477: “printf”: 格式字符串“%#x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“pGPPSA *”
   ReplayLabelEx.vcxproj -> D:\Games\Hisotensoku\th123\modules\ReplayLabelEx\ReplayLabelEx.dll
