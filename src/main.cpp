@@ -60,6 +60,11 @@ static DWORD WINAPI DummyGetPrivateProfileStringA(
 	__in_opt LPCSTR lpFileName
 )
 {
+#ifdef _DEBUG
+	puts("jumped! ");
+#endif
+
+	
 	const DWORD result = ::GetPrivateProfileStringA(lpAppName, lpKeyName, lpDefault, lpReturnedString, nSize, lpFileName);
 	if (std::string("replay") != lpAppName || std::string("file_vs") != lpKeyName) {
 		return result;
@@ -79,11 +84,9 @@ static DWORD WINAPI DummyGetPrivateProfileStringA(
 	return result;
 }
 
-
+typedef DWORD(__stdcall*  pGPPSA)(LPCSTR, LPCSTR, LPCSTR, LPSTR, DWORD, LPCSTR);
 extern "C" __declspec(dllexport) bool Initialize(HMODULE hMyModule, HMODULE hParentModule)
 {
-	//DWORD old;
-
 #ifdef _DEBUG
 	FILE* _;
 
@@ -91,13 +94,17 @@ extern "C" __declspec(dllexport) bool Initialize(HMODULE hMyModule, HMODULE hPar
 	freopen_s(&_, "CONOUT$", "w", stdout);
 	freopen_s(&_, "CONOUT$", "w", stderr);
 #endif
-
+	
 	DWORD oldProtect;
-	::VirtualProtect(&SokuLib::DLL::kernel32.GetPrivateProfileStringA, 4, PAGE_READWRITE, &oldProtect);
-	SokuLib::DLL::kernel32.GetPrivateProfileStringA = DummyGetPrivateProfileStringA;
-	::VirtualProtect(&SokuLib::DLL::kernel32.GetPrivateProfileStringA, 4, oldProtect, &oldProtect);
+	//auto target = &SokuLib::DLL::kernel32.GetPrivateProfileStringA; //wrong
+	auto target = reinterpret_cast<pGPPSA*>(0x0085712C);
+	::VirtualProtect(target, 4, PAGE_READWRITE, &oldProtect);
+	*target = DummyGetPrivateProfileStringA;
+	::VirtualProtect(target, 4, oldProtect, &oldProtect);
 	FlushInstructionCache(GetCurrentProcess(), nullptr, 0);
-	puts("Hook, success!");
+#ifdef _DEBUG
+	printf("function at %#x hooked!", target);
+#endif // _DEBUG
 	return true;
 }
 
