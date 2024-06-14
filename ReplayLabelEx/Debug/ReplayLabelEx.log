@@ -1,7 +1,53 @@
-﻿  CMakeCXXCompilerId.cpp
-  main.dll.cpp
+﻿  Packet.cpp
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(181,10): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
+  (编译源文件“SokuLib/src/Packet.cpp”)
+  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(181,10):
+  默认构造函数或 copy/move 赋值运算符将忽略此成员
+  
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(206,10): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
+  (编译源文件“SokuLib/src/Packet.cpp”)
+  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(206,10):
+  默认构造函数或 copy/move 赋值运算符将忽略此成员
+  
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(298,11): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
+  (编译源文件“SokuLib/src/Packet.cpp”)
+  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(298,11):
+  默认构造函数或 copy/move 赋值运算符将忽略此成员
+  
+  DeprecatedElements.cpp
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\src\Cards.hpp(100,3): warning C4996: 'SokuLib::UnknownCardStruct': Use CardInfo instead
+  (编译源文件“sokulib/src/DeprecatedElements.cpp”)
+  
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\src\CharacterManager.hpp(514,8): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
+  (编译源文件“sokulib/src/DeprecatedElements.cpp”)
+  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\src\CharacterManager.hpp(514,8):
+  默认构造函数或 copy/move 赋值运算符将忽略此成员
+  
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\src\GameObject.hpp(34,21): warning C4309: “初始化”: 截断常量值
+  (编译源文件“sokulib/src/DeprecatedElements.cpp”)
+  
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\src\IFileReader.hpp(57,30): warning C4244: “=”: 从“LONG”转换到“char”，可能丢失数据
+  (编译源文件“sokulib/src/DeprecatedElements.cpp”)
+  
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\src\NetObject.hpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  (编译源文件“sokulib/src/DeprecatedElements.cpp”)
+  
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\src\Packet.hpp(181,10): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
+  (编译源文件“sokulib/src/DeprecatedElements.cpp”)
+  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\src\Packet.hpp(181,10):
+  默认构造函数或 copy/move 赋值运算符将忽略此成员
+  
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\src\Packet.hpp(206,10): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
+  (编译源文件“sokulib/src/DeprecatedElements.cpp”)
+  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\src\Packet.hpp(206,10):
+  默认构造函数或 copy/move 赋值运算符将忽略此成员
+  
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\src\Packet.hpp(298,11): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
+  (编译源文件“sokulib/src/DeprecatedElements.cpp”)
+  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\src\Packet.hpp(298,11):
+  默认构造函数或 copy/move 赋值运算符将忽略此成员
+  
   main.cpp
-C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\sokulib\test\main.dll.cpp(3,10): error C1083: 无法打开包括文件: “SokuLib.hpp”: No such file or directory
 C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Cards.hpp(100,3): warning C4996: 'SokuLib::UnknownCardStruct': Use CardInfo instead
   (编译源文件“src/main.cpp”)
   
@@ -19,19 +65,21 @@ C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\IFileReader.hpp(57,30): 
 C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\NetObject.hpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
   (编译源文件“src/main.cpp”)
   
-C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(179,10): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(181,10): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
   (编译源文件“src/main.cpp”)
-  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(179,10):
+  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(181,10):
   默认构造函数或 copy/move 赋值运算符将忽略此成员
   
-C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(204,10): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(206,10): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
   (编译源文件“src/main.cpp”)
-  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(204,10):
+  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(206,10):
   默认构造函数或 copy/move 赋值运算符将忽略此成员
   
-C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(296,11): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(298,11): warning C4200: 使用了非标准扩展: 结构/联合中的零大小数组
   (编译源文件“src/main.cpp”)
-  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(296,11):
+  C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(298,11):
   默认构造函数或 copy/move 赋值运算符将忽略此成员
   
   正在生成代码...
+    正在创建库 C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\Debug\ReplayLabelEx.lib 和对象 C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\Debug\ReplayLabelEx.exp
+  ReplayLabelEx.vcxproj -> C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\Debug\ReplayLabelEx.dll

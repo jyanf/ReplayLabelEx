@@ -84,6 +84,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>lib/d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -143,7 +144,7 @@
     <ClCompile Include="sokulib\src\dlls\USER32.DLL.cpp" />
     <ClCompile Include="sokulib\src\dlls\WINMM.DLL.cpp" />
     <ClCompile Include="sokulib\src\dlls\WS2_32.DLL.cpp" />
-    <ClCompile Include="sokulib\src\DrawUtils.cpp" />
+    <ClCompile Include="SokuLib\src\DrawUtils.cpp" />
     <ClCompile Include="sokulib\src\Font.cpp" />
     <ClCompile Include="sokulib\src\FrameData.cpp" />
     <ClCompile Include="sokulib\src\GameObject.cpp" />
@@ -160,7 +161,7 @@
     <ClCompile Include="sokulib\src\menus\ResultMenu.cpp" />
     <ClCompile Include="sokulib\src\Misc.cpp" />
     <ClCompile Include="sokulib\src\NetObject.cpp" />
-    <ClCompile Include="sokulib\src\Packet.cpp" />
+    <ClCompile Include="SokuLib\src\Packet.cpp" />
     <ClCompile Include="sokulib\src\Player.cpp" />
     <ClCompile Include="sokulib\src\PracticeSettings.cpp" />
     <ClCompile Include="sokulib\src\Profile.cpp" />
