@@ -103,7 +103,7 @@ extern "C" __declspec(dllexport) bool Initialize(HMODULE hMyModule, HMODULE hPar
 	::VirtualProtect(target, 4, oldProtect, &oldProtect);
 	FlushInstructionCache(GetCurrentProcess(), nullptr, 0);
 #ifdef _DEBUG
-	printf("function at %#x hooked!", target);
+	printf("function at %#x hooked!\n", target);
 #endif // _DEBUG
 	return true;
 }
