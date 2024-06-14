@@ -40,3 +40,14 @@
 # Build directories
 cmake-build-*
 build
+/ReplayLabelEx/Debug/ReplayLabelEx.ilk
+/ReplayLabelEx/Debug/ReplayLabelEx.log
+/ReplayLabelEx/Debug/ReplayLabelEx.tlog/link.read.1.tlog
+/ReplayLabelEx/Debug/ReplayLabelEx.tlog/link.write.1.tlog
+/ReplayLabelEx/Debug/vc143.idb
+/ReplayLabelEx/Debug/vc143.pdb
+/ReplayLabelEx/Debug/ReplayLabelEx.tlog/Cl.items.tlog
+/ReplayLabelEx/Debug/ReplayLabelEx.tlog/CL.read.1.tlog
+/ReplayLabelEx/Debug/ReplayLabelEx.tlog/CL.write.1.tlog
+/ReplayLabelEx/Debug/ReplayLabelEx.tlog/link.command.1.tlog
+/ReplayLabelEx/Debug/ReplayLabelEx.tlog/link.secondary.1.tlog
