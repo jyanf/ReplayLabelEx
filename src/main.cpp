@@ -1,113 +1,110 @@
-//
-// Created by PinkySmile on 31/10/2020
-//
-
-#include <SokuLib.hpp>
+#include <string>
+#include <windows.h>
+#include <Shlwapi.h>
+//#include <SokuLib.hpp>
+#include "../SokuLib/src/SokuLib.hpp"
 
 static bool init = false;
-static int (SokuLib::BattleManager::*ogBattleMgrOnProcess)();
-static void (SokuLib::BattleManager::*ogBattleMgrOnRender)();
-static SokuLib::DrawUtils::Sprite text;
-static SokuLib::SWRFont font;
 
-int __fastcall CBattleManager_OnRender(SokuLib::BattleManager *This)
+enum ComMode {
+	COM_MODE_STORY = 0,
+	COM_MODE_ARCADE = 1,
+	COM_MODE_COM = 2,
+	COM_MODE_PLAYER = 3,
+	COM_MODE_SERVER = 4,
+	COM_MODE_CLIENT = 5,
+	COM_MODE_WATCHER = 6,
+};
+enum BattleResult {
+	BATTLE_RESULT_WIN,
+	BATTLE_RESULT_LOSW,
+	BATTLE_RESULT_DRAW,
+	BATTLE_RESULT_NO_GAME
+};
+
+static BattleResult GetWinLose()
 {
-	(This->*ogBattleMgrOnRender)();
-	text.draw();
-	return 0;
-}
+	SokuLib::BattleMode comMode = SokuLib::mainMode;
+	SokuLib::BattleManager battleMgr = SokuLib::getBattleMgr();
+	const char lWin = battleMgr.leftCharacterManager.score;
+	const char rWin = battleMgr.rightCharacterManager.score;
+	const char& myWin = (comMode == SokuLib::BATTLE_MODE_VSCLIENT) ? rWin : lWin;
+	const char& otherWin = (comMode == SokuLib::BATTLE_MODE_VSCLIENT) ? lWin : rWin;
 
-void loadFont()
-{
-	SokuLib::FontDescription desc;
-
-	// Pink
-	desc.r1 = 255;
-	desc.g1 = 155;
-	desc.b1 = 155;
-	// Light green
-	desc.r2 = 155;
-	desc.g2 = 255;
-	desc.b2 = 155;
-	desc.height = 24;
-	desc.weight = FW_BOLD;
-	desc.italic = 0;
-	desc.shadow = 4;
-	desc.bufferSize = 1000000;
-	desc.charSpaceX = 0;
-	desc.charSpaceY = 0;
-	desc.offsetX = 0;
-	desc.offsetY = 0;
-	desc.useOffset = 0;
-	strcpy(desc.faceName, "MonoSpatialModSWR");
-	font.create();
-	font.setIndirect(desc);
-}
-
-int __fastcall CBattleManager_OnProcess(SokuLib::BattleManager *This)
-{
-	if (!init) {
-		SokuLib::Vector2i realSize;
-
-		loadFont();
-		text.texture.createFromText("Hello, world!", font, {300, 300}, &realSize);
-		text.setPosition(SokuLib::Vector2i{320 - realSize.x / 2, 240 - realSize.y / 2});
-		text.setSize(realSize.to<unsigned>());
-		text.rect.width = realSize.x;
-		text.rect.height = realSize.y;
-		init = true;
+	if (myWin == 2) {
+		if (otherWin == 2) {
+			return BATTLE_RESULT_DRAW;
+		}
+		return BATTLE_RESULT_WIN;
 	}
-	text.setRotation(text.getRotation() + 0.01f);
-	return (This->*ogBattleMgrOnProcess)();
+	if (otherWin == 2) {
+		return BATTLE_RESULT_LOSW;
+	}
+	return BATTLE_RESULT_NO_GAME;
 }
 
-// We check if the game version is what we target (in our case, Soku 1.10a).
 extern "C" __declspec(dllexport) bool CheckVersion(const BYTE hash[16])
 {
 	return memcmp(hash, SokuLib::targetHash, sizeof(SokuLib::targetHash)) == 0;
 }
 
-// Called when the mod loader is ready to initialize this module.
-// All hooks should be placed here. It's also a good moment to load settings from the ini.
+static DWORD WINAPI DummyGetPrivateProfileStringA(
+	__in_opt LPCSTR lpAppName,
+	__in_opt LPCSTR lpKeyName,
+	__in_opt LPCSTR lpDefault,
+	__out_ecount_part_opt(nSize, return +1) LPSTR lpReturnedString,
+	__in_opt DWORD nSize,
+	__in_opt LPCSTR lpFileName
+)
+{
+	const DWORD result = ::GetPrivateProfileStringA(lpAppName, lpKeyName, lpDefault, lpReturnedString, nSize, lpFileName);
+	if (std::string("replay") != lpAppName || std::string("file_vs") != lpKeyName) {
+		return result;
+	}
+
+	std::string path(lpReturnedString);
+	const std::string label = "%winlose";
+	const std::string winlose[4] = { "win", "lose", "draw", "no_game" };
+	const unsigned int pos = path.find(label);
+	if (pos == std::string::npos) {
+		return result;
+	}
+	path.replace(path.begin() + pos, path.begin() + pos + label.size(), winlose[GetWinLose()]);
+	::strcpy_s(lpReturnedString, nSize, path.c_str());
+
+	printf("replaced & saved %s\n", path.c_str());
+	return result;
+}
+
+
 extern "C" __declspec(dllexport) bool Initialize(HMODULE hMyModule, HMODULE hParentModule)
 {
-	DWORD old;
+	//DWORD old;
 
 #ifdef _DEBUG
-	FILE *_;
+	FILE* _;
 
 	AllocConsole();
 	freopen_s(&_, "CONOUT$", "w", stdout);
 	freopen_s(&_, "CONOUT$", "w", stderr);
 #endif
 
-	puts("Hello, world!");
-	VirtualProtect((PVOID)RDATA_SECTION_OFFSET, RDATA_SECTION_SIZE, PAGE_EXECUTE_WRITECOPY, &old);
-	ogBattleMgrOnRender  = SokuLib::TamperDword(&SokuLib::VTable_BattleManager.onRender,  CBattleManager_OnRender);
-	ogBattleMgrOnProcess = SokuLib::TamperDword(&SokuLib::VTable_BattleManager.onProcess, CBattleManager_OnProcess);
-	VirtualProtect((PVOID)RDATA_SECTION_OFFSET, RDATA_SECTION_SIZE, old, &old);
-
+	DWORD oldProtect;
+	::VirtualProtect(&SokuLib::DLL::kernel32.GetPrivateProfileStringA, 4, PAGE_READWRITE, &oldProtect);
+	SokuLib::DLL::kernel32.GetPrivateProfileStringA = DummyGetPrivateProfileStringA;
+	::VirtualProtect(&SokuLib::DLL::kernel32.GetPrivateProfileStringA, 4, oldProtect, &oldProtect);
 	FlushInstructionCache(GetCurrentProcess(), nullptr, 0);
+	puts("Hook, success!");
 	return true;
 }
 
 extern "C" int APIENTRY DllMain(HMODULE hModule, DWORD fdwReason, LPVOID lpReserved)
 {
-	return TRUE;
+	return true;
 }
 
-// New mod loader functions
-// Loading priority. Mods are loaded in order by ascending level of priority (the highest first).
-// When 2 mods define the same loading priority the loading order is undefined.
+
 extern "C" __declspec(dllexport) int getPriority()
 {
 	return 0;
 }
-
-// Not yet implemented in the mod loader, subject to change
-// SokuModLoader::IValue **getConfig();
-// void freeConfig(SokuModLoader::IValue **v);
-// bool commitConfig(SokuModLoader::IValue *);
-// const char *getFailureReason();
-// bool hasChainedHooks();
-// void unHook();
