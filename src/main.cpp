@@ -1,3 +1,6 @@
+//Original Author: ËûÈË¤Î¿ÕËÆ
+//
+
 #include <string>
 #include <windows.h>
 #include <Shlwapi.h>
