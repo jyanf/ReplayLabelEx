@@ -32,6 +32,5 @@ C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(298,11): warn
   C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\SokuLib\src\Packet.hpp(298,11):
   默认构造函数或 copy/move 赋值运算符将忽略此成员
   
-C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\src\main.cpp(227,20): warning C4018: “<”: 有符号/无符号不匹配
-C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\src\main.cpp(272,9): warning C4477: “printf”: 格式字符串“%#x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“pGPPSA *”
+C:\Users\Lenovo\Desktop\Codes\ReplayLabelEx\src\main.cpp(283,9): warning C4477: “printf”: 格式字符串“%#x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“pGPPSA *”
   ReplayLabelEx.vcxproj -> D:\Games\Hisotensoku\th123\modules\ReplayLabelEx\ReplayLabelEx.dll

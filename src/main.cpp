@@ -18,8 +18,7 @@ namespace Keys {
 	};
 	static const std::wstring& GetBattleMode()
 	{
-		SokuLib::BattleMode comMode = SokuLib::mainMode;
-		switch (comMode)
+		switch (SokuLib::mainMode)
 		{
 		case SokuLib::BATTLE_MODE_VSCOM:	return BattleMode[0];
 		case SokuLib::BATTLE_MODE_VSPLAYER: return BattleMode[1];
@@ -34,7 +33,7 @@ namespace Keys {
 		}
 	}
 	static const std::array<std::wstring, 4> BattleResult = {
-		L"win", L"lose", L"no_game", L"draw"
+		L"win", L"lose", L"noed", L"draw"
 	};
 	static const std::wstring& GetBattleResult()
 	{
@@ -93,6 +92,10 @@ static bool GetChName(const std::vector<SokuLib::Character>& ChSerials, std::vec
 	{
 		GetPrivateProfileStringW(L"Character", (L"ch" + std::to_wstring(serial)).c_str(), L"UNKNOWN", tempw, maxsize, iniPath);
 		names.push_back(tempw);
+#ifdef _DEBUG
+		wprintf(L"Get ch%2d, name %s in %d\n", serial, tempw, ChSerials.size());
+#endif // _DEBUG
+
 	}
 
 	delete[] tempw;
@@ -114,9 +117,9 @@ static bool GetSubs(std::wstring& path, std::vector<std::wstring>& labels, std::
 	const DWORD maxsize = FILEVS_LIMIT;
 	LPWSTR const tempw = new wchar_t[maxsize];
 	//LPSTR const tempc = new char[maxsize];
-	const DWORD resultVs = GetPrivateProfileStringW(L"PathFormat", L"file_vs", L"hello", tempw, maxsize, iniPath);
+	const DWORD resultVs = GetPrivateProfileStringW(L"PathFormat", L"file_vs", L"err_invalid_path", tempw, maxsize, iniPath);
 	path = tempw;
-	wprintf(L"%s as %s", tempw, path.c_str());
+	//wprintf(L"%s as %s", tempw, path.c_str());
 
 
 	//按模式展开
@@ -132,6 +135,9 @@ static bool GetSubs(std::wstring& path, std::vector<std::wstring>& labels, std::
 	//对战结果
 	GetPrivateProfileStringW(L"BattleResult",	L"label",	L"%ed",		tempw, maxsize, iniPath);
 	labels.push_back(tempw);
+#ifdef _DEBUG
+	wprintf(L"mode:%d\n", SokuLib::mainMode);
+#endif
 	GetPrivateProfileStringW(L"BattleResult", Keys::GetBattleResult().c_str(), NULL, tempw, maxsize, iniPath);
 	subs.push_back(tempw);
 	//GetPrivateProfileStringW(L"BattleResult",	L"win",		L"win",		tempw, maxsize, iniPath);
@@ -158,7 +164,8 @@ static bool GetSubs(std::wstring& path, std::vector<std::wstring>& labels, std::
 
 	//扩展原版角色名
 	std::vector<std::wstring> CharNamesW;
-	if (!GetChName(std::vector<SokuLib::Character>(SokuLib::leftChar, SokuLib::rightChar), CharNamesW)) CharNamesW = {L"%c1", L"%c2"};
+	std::vector<SokuLib::Character> Serials = { SokuLib::leftChar, SokuLib::rightChar };
+	if (!GetChName(Serials, CharNamesW)) CharNamesW = {L"%c1", L"%c2"};
 	GetPrivateProfileStringW(L"P1CharacterW",	L"label",	L"%C1",		tempw, maxsize, iniPath);
 	labels.push_back(tempw);
 	subs.push_back(CharNamesW[0]);
@@ -224,16 +231,20 @@ static DWORD WINAPI DummyGetPrivateProfileStringA(
 
 	std::wstring path;
 	if (!GetSubs(path, labels, subs)) return result;
-	for (int i = 0; i < labels.size(); ++i)
+	for (unsigned i = 0; i < labels.size(); ++i)
 	{
-		const unsigned int pos = path.find(labels[i]);
-		if (pos == std::wstring::npos) continue;
-		//printf("%S replacing %S\n", subs[i].c_str(), labels[i].c_str());
-		path.replace(path.begin() + pos, path.begin() + pos + labels[i].size(), subs[i]);
-		wprintf(path.c_str());
+		unsigned int pos;
+		while (pos = path.find(labels[i]), pos != std::wstring::npos)
+		{
+#ifdef _DEBUG
+			wprintf(L"%s replacing %s\n", subs[i].c_str(), labels[i].c_str());
+#endif
+
+			path.replace(path.begin() + pos, path.begin() + pos + labels[i].size(), subs[i]);
+		}
 	}
 	//if (WideCharToMultiByte(CP_ACP, 0, path.c_str(), -1, lpReturnedString, 0, NULL, NULL) > FILEVS_LIMIT) return result;
-	result = WideCharToMultiByte(CP_ACP, 0, path.c_str(), -1, lpReturnedString, FILEVS_LIMIT, NULL, NULL);
+	result = WideCharToMultiByte(CP_THREAD_ACP, 0, path.c_str(), -1, lpReturnedString, FILEVS_LIMIT, NULL, NULL);
 	//strcpy_s(lpReturnedString, nSize, path.c_str());
 	
 #ifdef _DEBUG
@@ -286,5 +297,5 @@ extern "C" int APIENTRY DllMain(HMODULE hModule, DWORD fdwReason, LPVOID lpReser
 
 extern "C" __declspec(dllexport) int getPriority()
 {
-	return 0;
+	return -1;
 }
