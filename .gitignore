@@ -38,3 +38,5 @@
 # Build directories
 cmake-build-*
 build
+/src/RCa21956
+/.gitignore
