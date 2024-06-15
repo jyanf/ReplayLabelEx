@@ -244,7 +244,8 @@ static DWORD WINAPI DummyGetPrivateProfileStringA(
 		}
 	}
 	//if (WideCharToMultiByte(CP_ACP, 0, path.c_str(), -1, lpReturnedString, 0, NULL, NULL) > FILEVS_LIMIT) return result;
-	result = WideCharToMultiByte(CP_THREAD_ACP, 0, path.c_str(), -1, lpReturnedString, FILEVS_LIMIT, NULL, NULL);
+	const char defaultc = 'x';//·ÀÖ¹repÂ·¾¶´ø?µ¼ÖÂ¶ªÊ§
+	result = WideCharToMultiByte(CP_THREAD_ACP, 0, path.c_str(), -1, lpReturnedString, FILEVS_LIMIT, &defaultc, NULL);
 	//strcpy_s(lpReturnedString, nSize, path.c_str());
 	
 #ifdef _DEBUG

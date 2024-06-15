@@ -265,6 +265,7 @@
     <ClInclude Include="sokulib\src\Vector2.hpp" />
     <ClInclude Include="sokulib\src\VTables.hpp" />
     <ClInclude Include="sokulib\src\Weather.hpp" />
+    <ClInclude Include="src\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="out\build\x64-debug\cmakefiles\3.28.0-msvc1\CMakeDetermineCompilerABI_C.bin" />
