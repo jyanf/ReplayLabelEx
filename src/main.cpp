@@ -10,7 +10,7 @@
 #include "../SokuLib/src/SokuLib.hpp"
 //#include "../SokuLib/src/DeprecatedElements.hpp"
 #define FILEVS_LIMIT 0x104
-#define isCL (SokuLib::mainMode == SokuLib::BATTLE_MODE_VSCLIENT)
+#define isCL (SokuLib::mainMode == SokuLib::BATTLE_MODE_VSSERVER)
 
 namespace Keys {
 	static const std::array<std::wstring, 5> BattleMode = {
@@ -37,12 +37,11 @@ namespace Keys {
 	};
 	static const std::wstring& GetBattleResult()
 	{
-		SokuLib::BattleMode comMode = SokuLib::mainMode;
 		SokuLib::BattleManager battleMgr = SokuLib::getBattleMgr();
 		const char lWin = battleMgr.leftCharacterManager.score;
 		const char rWin = battleMgr.rightCharacterManager.score;
-		const char& myWin = (comMode == SokuLib::BATTLE_MODE_VSCLIENT) ? rWin : lWin;
-		const char& otherWin = (comMode == SokuLib::BATTLE_MODE_VSCLIENT) ? lWin : rWin;
+		const char& myWin = isCL ? rWin : lWin;
+		const char& otherWin = isCL ? lWin : rWin;
 
 		if (myWin == 2) {
 			if (otherWin == 2) return BattleResult[3];
