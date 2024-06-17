@@ -55,20 +55,17 @@ namespace Keys {
 	static const std::array<std::wstring, 4> BattleResult = {
 		L"win", L"lose", L"noed", L"draw", 
 	};
-	static const std::wstring& GetBattleResult()
+	static const std::array<std::wstring, 2> GetBattleResult()
 	{
 		const auto scores = GetScores();
-		const char& myWin = isCL ? scores[1] : scores[0];
-		const char& otherWin = isCL ? scores[0] : scores[1];
-
-		if (myWin == 2) {
-			if (otherWin == 2) return BattleResult[3];
-			return BattleResult[0];
+		if (scores[0] == 2) {
+			if (scores[1] == 2) return {BattleResult[3], BattleResult[3]};
+			return { BattleResult[0], BattleResult[1] };
 		}
-		if (otherWin == 2) {
-			return BattleResult[1];
+		if (scores[1] == 2) {
+			return { BattleResult[1], BattleResult[0] };
 		}
-		return BattleResult[2];
+		return { BattleResult[2], BattleResult[2] };
 	}
 	static const std::wstring GetSelfProfile()
 	{
@@ -140,52 +137,48 @@ static bool GetSubs(std::wstring& path, std::vector<std::wstring>& labels, std::
 	path = tempw;
 	//wprintf(L"%s as %s", tempw, path.c_str());
 
-
 	//按模式展开
 	GetPrivateProfileStringW(L"BattleMode",		L"label",	L"%md",		tempw, maxsize, iniPath);
 	labels.push_back(tempw);
 	GetPrivateProfileStringW(L"BattleMode", Keys::GetBattleMode().c_str(), NULL, tempw, maxsize, iniPath);
 	subs.push_back(tempw);
-	//GetPrivateProfileStringW(L"BattleMode",		L"vs_com", L"local", tempw, maxsize, iniPath);
-	//GetPrivateProfileStringW(L"BattleMode",		L"vs_loc",	L"local\\%p1 ：%p2", tempw, maxsize, iniPath);
-	//GetPrivateProfileStringW(L"BattleMode",		L"vs_net",	L"online\\%po",tempw, maxsize, iniPath);
-	//GetPrivateProfileStringW(L"BattleMode",		L"spectate",L"watch\\%p1",tempw, maxsize, iniPath);
 
 	//对战结果
-	GetPrivateProfileStringW(L"MyBattleResult",	L"label",	L"%ed",		tempw, maxsize, iniPath);
-	labels.push_back(tempw);
-#ifdef _DEBUG
-	wprintf(L"mode:%d\n", SokuLib::mainMode);
-#endif
-	GetPrivateProfileStringW(L"MyBattleResult", Keys::GetBattleResult().c_str(), NULL, tempw, maxsize, iniPath);
-	subs.push_back(tempw);
-	//GetPrivateProfileStringW(L"BattleResult",	L"win",		L"win",		tempw, maxsize, iniPath);
-	//GetPrivateProfileStringW(L"BattleResult",	L"lose",	L"lose",	tempw, maxsize, iniPath);
-	//GetPrivateProfileStringW(L"BattleResult",	L"draw",	L"draw",	tempw, maxsize, iniPath);
-	//GetPrivateProfileStringW(L"BattleResult",	L"no_game", L"no_game", tempw, maxsize, iniPath);
+	auto results = Keys::GetBattleResult();
+	GetPrivateProfileStringW(L"BattleResult", results[0].c_str(), NULL, tempw, maxsize, iniPath);
+	results[0] = tempw;
+	GetPrivateProfileStringW(L"BattleResult", results[1].c_str(), NULL, tempw, maxsize, iniPath);
+	results[1] = tempw;
+	GetPrivateProfileStringW(L"BattleResult",	L"label1",	L"%e1",		tempw, maxsize, iniPath);
+	labels.push_back(tempw); subs.push_back(results[0]);
+	GetPrivateProfileStringW(L"BattleResult",	L"label2",	L"%e2",		tempw, maxsize, iniPath);
+	labels.push_back(tempw); subs.push_back(results[1]);
+	GetPrivateProfileStringW(L"BattleResult",	L"labels",	L"%es",		tempw, maxsize, iniPath);
+	labels.push_back(tempw); subs.push_back(!isNV ? (Keys::p_order() ? results[0] : results[1]) : (isCL ? results[1] : results[0]));
+	GetPrivateProfileStringW(L"BattleResult",	L"labelo",	L"%eo",		tempw, maxsize, iniPath);
+	labels.push_back(tempw); subs.push_back(!isNV ? (Keys::p_order() ? results[0] : results[1]) : (isCL ? results[0] : results[1]));
+
 	//1P、2P比分
 	const auto scores = Keys::GetScores();
-	GetPrivateProfileStringW(L"P1Score",		L"label",	L"%s1",		tempw, maxsize, iniPath);
+	GetPrivateProfileStringW(L"BattleScore",	L"label1",	L"%s1",		tempw, maxsize, iniPath);
 	labels.push_back(tempw); subs.push_back(std::to_wstring(scores[0]));
-	GetPrivateProfileStringW(L"P2Score",		L"label",	L"%s2",		tempw, maxsize, iniPath);
+	GetPrivateProfileStringW(L"BattleScore",	L"label2",	L"%s2",		tempw, maxsize, iniPath);
 	labels.push_back(tempw); subs.push_back(std::to_wstring(scores[1]));
-
 	
-
 	//自机机签
-	GetPrivateProfileStringW(L"SelfProfileName",L"label",	L"%ps",		tempw, maxsize, iniPath);
+	GetPrivateProfileStringW(L"ProfileName",	L"labels",	L"%ps",		tempw, maxsize, iniPath);
 	labels.push_back(tempw);
 	subs.push_back(Keys::GetSelfProfile());
 	//对手机签
-	GetPrivateProfileStringW(L"OpponentProfileName", L"label", L"%po",	tempw, maxsize, iniPath);
+	GetPrivateProfileStringW(L"ProfileName",	L"labelo",	L"%po",		tempw, maxsize, iniPath);
 	labels.push_back(tempw);
 	subs.push_back(Keys::GetOppoProfile());
 	//自机角色
-	GetPrivateProfileStringW(L"SelfCharacter",	L"label",	L"%cs",		tempw, maxsize, iniPath);
+	GetPrivateProfileStringW(L"CharacterName",	L"labels",	L"%cs",		tempw, maxsize, iniPath);
 	labels.push_back(tempw);
 	subs.push_back(Keys::GetSelfChar());
 	//对手角色
-	GetPrivateProfileStringW(L"OpponentCharacter", L"label",L"%co",		tempw, maxsize, iniPath);
+	GetPrivateProfileStringW(L"CharacterName",	L"labelo",	L"%co",		tempw, maxsize, iniPath);
 	labels.push_back(tempw);
 	subs.push_back(Keys::GetOppoChar());
 
@@ -193,16 +186,16 @@ static bool GetSubs(std::wstring& path, std::vector<std::wstring>& labels, std::
 	std::vector<std::wstring> CharNamesW;
 	std::vector<SokuLib::Character> Serials = { SokuLib::leftChar, SokuLib::rightChar };
 	if (!GetChName(Serials, CharNamesW)) CharNamesW = {L"%c1", L"%c2"};
-	GetPrivateProfileStringW(L"P1CharacterW",	L"label",	L"%C1",		tempw, maxsize, iniPath);
+	GetPrivateProfileStringW(L"CharacterNameW",	L"label1",	L"%C1",		tempw, maxsize, iniPath);
 	labels.push_back(tempw);
 	subs.push_back(CharNamesW[0]);
-	GetPrivateProfileStringW(L"P2CharacterW",	L"label",	L"%C2",		tempw, maxsize, iniPath);
+	GetPrivateProfileStringW(L"CharacterNameW",	L"label2",	L"%C2",		tempw, maxsize, iniPath);
 	labels.push_back(tempw);
 	subs.push_back(CharNamesW[1]);
-	GetPrivateProfileStringW(L"SelfCharacterW",	L"label",	L"%Cs",		tempw, maxsize, iniPath);
+	GetPrivateProfileStringW(L"CharacterNameW",	L"labels",	L"%Cs",		tempw, maxsize, iniPath);
 	labels.push_back(tempw);
 	subs.push_back(!isNV ? (Keys::p_order() ? CharNamesW[0] : CharNamesW[1]) : (isCL ? CharNamesW[1] : CharNamesW[0]));
-	GetPrivateProfileStringW(L"OpponentCharacterW", L"label",L"%Co",	tempw, maxsize, iniPath);
+	GetPrivateProfileStringW(L"CharacterNameW", L"labelo",	L"%Co",		tempw, maxsize, iniPath);
 	labels.push_back(tempw);
 	subs.push_back(!isNV ? (!Keys::p_order() ? CharNamesW[0] : CharNamesW[1]) : (isCL ? CharNamesW[0] : CharNamesW[1]));
 
@@ -234,28 +227,7 @@ static DWORD WINAPI DummyGetPrivateProfileStringA(
 	}
 
 	std::vector<std::wstring> labels;
-	/* {
-		L"BattleMode",
-		L"BattleResult",
-		L"SelfProfileName",
-		L"OpponentProfileName",
-		L"SelfCharacter",
-		L"OpponentCharacter",
-		L"SelfCharacterW",
-		L"OppoCharacterW",
-		L"P1CharacterW",
-		L"P2CharacterW"
-	};*/
 	std::vector<std::wstring> subs;
-	/*{
-		Keys::GetBattleMode(),
-		Keys::GetBattleResult(),
-		Keys::GetSelfProfile(),
-		Keys::GetOppoProfile(),
-		Keys::GetSelfChar(),
-		Keys::GetOppoChar()
-	};*/
-
 	std::wstring path;
 	if (!GetSubs(path, labels, subs)) return result;
 	for (unsigned i = 0; i < labels.size(); ++i)
