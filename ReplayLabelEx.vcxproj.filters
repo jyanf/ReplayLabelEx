@@ -21,9 +21,6 @@
     <ClCompile Include="out\build\x64-debug\cmakefiles\3.28.0-msvc1\compileridcxx\CMakeCXXCompilerId.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="out\build\x64-debug\cmakefiles\showincludes\main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sokulib\src\AnimationObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -181,12 +178,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sokulib\src\menus\ResultMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sokulib\test\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sokulib\test\main.dll.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
@@ -438,6 +429,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sokulib\src\menus\ResultMenu.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
