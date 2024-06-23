@@ -28,21 +28,21 @@ VS_VERSION_INFO VERSIONINFO
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "040904e4"
+        BLOCK "000404e4"
         BEGIN
             VALUE "CompanyName", "SokuDev"
-            VALUE "FileDescription", "Example mod for Touhou 12.3"
-            VALUE "FileVersion", "1.3"
-            VALUE "InternalName", "ModTemplate"
-            VALUE "LegalCopyright", "PinkySmile,SokuDev"
-            VALUE "OriginalFilename", "ModTemplate.dll"
-            VALUE "ProductName", "ModTemplate"
-            VALUE "ProductVersion", "1.0"
+            VALUE "FileDescription", "Add extra available labels for replay file name format"
+            VALUE "FileVersion", "1.4"
+            VALUE "InternalName", "ReplayLabelEx"
+            VALUE "LegalCopyright", "Fishuwako; (À˚»À§Œø’À∆), SokuDev"
+            VALUE "OriginalFilename", "ReplayLabelEx-release.dll"
+            VALUE "ProductName", "ReplayLabelEx"
+            VALUE "ProductVersion", "1.4"
         END
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "Translation", 0x409, 1252
+        VALUE "Translation", 0x4, 1252
     END
 END
 
