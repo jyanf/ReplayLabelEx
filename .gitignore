@@ -51,4 +51,6 @@ build
 /ReplayLabelEx/Release/vc143.pdb
 *.exp
 *.pdb
+*.log
+*.tlog
 
