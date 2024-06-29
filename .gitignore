@@ -49,6 +49,12 @@ build
 /ReplayLabelEx/Release/ReplayLabelEx.tlog/link.read.1.tlog
 /ReplayLabelEx/Release/ReplayLabelEx.tlog/rc.read.1.tlog
 /ReplayLabelEx/Release/vc143.pdb
+/ReplayLabelEx/Release/ReplayLabelEx.tlog/CL.command.1.tlog
+/.gitignore
+/.gitignore
+/ReplayLabelEx/Release/ReplayLabelEx.tlog/CL.write.1.tlog
+/.gitignore
+/.gitignore
 *.exp
 *.pdb
 *.log
