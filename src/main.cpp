@@ -274,7 +274,7 @@ extern "C" __declspec(dllexport) bool Initialize(HMODULE hMyModule, HMODULE hPar
 	
 	DWORD oldProtect;
 	//auto target = &SokuLib::DLL::kernel32.GetPrivateProfileStringA; //wrong
-	auto target = reinterpret_cast<pGPPSA*>(0x0085712C);
+	auto target = reinterpret_cast<pGPPSA*>(0x0085712C);			//specially thanks @Hagb Green
 	VirtualProtect(target, 4, PAGE_READWRITE, &oldProtect);
 	*target = DummyGetPrivateProfileStringA;
 	VirtualProtect(target, 4, oldProtect, &oldProtect);
