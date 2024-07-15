@@ -104,12 +104,12 @@ static bool GetChName(const std::vector<SokuLib::Character>& ChSerials, std::vec
 	}
 	const DWORD maxsize = 20;
 	LPWSTR const tempw = new wchar_t[maxsize];
-	for (auto serial : ChSerials)
+	for (int i=0; i<ChSerials.size(); ++i)
 	{
-		GetPrivateProfileStringW(L"Character", (L"ch" + std::to_wstring(serial)).c_str(), L"UNKNOWN", tempw, maxsize, iniPath);
+		GetPrivateProfileStringW(L"Character", (L"ch" + std::to_wstring(ChSerials[i])).c_str(), (L"%c" + std::to_wstring(i + 1)).c_str(), tempw, maxsize, iniPath);
 		names.push_back(tempw);
 #ifdef _DEBUG
-		wprintf(L"Get ch%2d, name %s in %d\n", serial, tempw, ChSerials.size());
+		wprintf(L"Get ch%2d, name %s in %d\n", ChSerials[i], tempw, ChSerials.size());
 #endif // _DEBUG
 
 	}
