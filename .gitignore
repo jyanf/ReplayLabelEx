@@ -63,3 +63,4 @@ build
 *.recipe
 *.aps
 *.user
+/ReplayLabelEx/Release/version.res
