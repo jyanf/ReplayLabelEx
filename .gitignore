@@ -42,7 +42,6 @@ cmake-build-*
 build
 /src/RCa21956
 /.gitignore
-/Release/ReplayLabelEx.pdb
 /ReplayLabelEx/Release/ReplayLabelEx.log
 /ReplayLabelEx/Release/ReplayLabelEx.tlog/CL.read.1.tlog
 /ReplayLabelEx/Release/ReplayLabelEx.tlog/link.command.1.tlog
