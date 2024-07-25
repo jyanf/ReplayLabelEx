@@ -50,7 +50,7 @@ namespace Keys {
 	static std::array<char, 2> GetScores()
 	{
 		const SokuLib::BattleManager& battleMgr = SokuLib::getBattleMgr();
-		return { battleMgr.leftCharacterManager.score, battleMgr.rightCharacterManager.score };
+		return { battleMgr.leftCharacterManager.score, battleMgr.rightCharacterManager.score };//debug显示此处可能引起崩溃
 	}
 	static const std::array<std::wstring, 4> BattleResult = {
 		L"win", L"lose", L"noed", L"draw", 
