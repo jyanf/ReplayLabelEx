@@ -263,13 +263,13 @@ static DWORD WINAPI DummyGetPrivateProfileStringA(
 
 
 static void (SokuLib::BattleManager::* originalArenaStart)(void*);
-static void __fastcall initScoreCopy(SokuLib::BattleManager* This, DWORD _placeHolder, void* param)
+static void __fastcall initScoreCopy(SokuLib::BattleManager* This, DWORD _placeHolder, void* param)//thank Hagb for instruction
 {
 #ifdef _DEBUG
 	printf("param %#x, score inited!\n", param);
 #endif
 	(This->*originalArenaStart)(param);
-	//Keys::ScoreCopy = { 0, 0 };
+	Keys::ScoreCopy = { 0, 0 };
 
 	return;
 }
