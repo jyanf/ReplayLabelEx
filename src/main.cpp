@@ -48,14 +48,14 @@ namespace Keys {
 		default:							return BattleMode[4];
 		}
 	}
-	static std::array<int, 2> ScoreCopy = {-1, -1};
+	static std::array <std::atomic<int>, 2 > ScoreCopy = { -1, -1 };
 	static std::array<int, 2> GetScores()
 	{
 		//const SokuLib::BattleManager& battleMgr = SokuLib::getBattleMgr();
 		//return { battleMgr.leftCharacterManager.score, battleMgr.rightCharacterManager.score };//debug显示此处可能因use of free引起崩溃
 		//auto score = ScoreCopy;
 		//ScoreCopy = {0, 0};
-		return ScoreCopy;
+		return { ScoreCopy[0], ScoreCopy[1]};
 	}
 	static const std::array<std::wstring, 4> BattleResult = {
 		L"win", L"lose", L"noed", L"draw", 
@@ -257,7 +257,7 @@ static DWORD WINAPI DummyGetPrivateProfileStringA(
 #ifdef _DEBUG
 	printf("replaced & saved as \n%s\n", lpReturnedString);
 #endif
-	Keys::ScoreCopy = {0, 0};
+	Keys::ScoreCopy[0] = Keys::ScoreCopy[1] = 0;
 	return result;
 }
 
@@ -269,7 +269,7 @@ static void __fastcall initScoreCopy(SokuLib::BattleManager* This, DWORD _placeH
 	printf("param %#x, score inited!\n", param);
 #endif
 	(This->*originalArenaStart)(param);
-	Keys::ScoreCopy = { 0, 0 };
+	Keys::ScoreCopy[0] = Keys::ScoreCopy[1] = 0;
 
 	return;
 }
@@ -278,7 +278,8 @@ static void (SokuLib::BattleManager::* originalHandleScore)();
 static void __fastcall saveScoreCopy(SokuLib::BattleManager* This)
 {
 	(This->*originalHandleScore)();
-	Keys::ScoreCopy = { This->leftCharacterManager.score, This->rightCharacterManager.score };
+	Keys::ScoreCopy[0] = This->leftCharacterManager.score;
+	Keys::ScoreCopy[1] = This->rightCharacterManager.score;
 #ifdef _DEBUG
 	const bool& LLose = This->leftCharacterManager.offset_0x574[0];
 	const bool& RLose = This->rightCharacterManager.offset_0x574[0];
