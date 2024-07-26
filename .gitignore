@@ -63,3 +63,7 @@ build
 *.aps
 *.user
 /ReplayLabelEx/Release/version.res
+*.idb
+*.idb
+*.ilk
+/ReplayLabelEx/Debug/version.res

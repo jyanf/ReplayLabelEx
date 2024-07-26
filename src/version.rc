@@ -32,12 +32,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "SokuDev"
             VALUE "FileDescription", "Add extra available labels for replay file name format"
-            VALUE "FileVersion", "1.5"
+            VALUE "FileVersion", "1.6b"
             VALUE "InternalName", "ReplayLabelEx"
             VALUE "LegalCopyright", "Fishuwako; (À˚»À§Œø’À∆; Hagb Green), SokuDev"
             VALUE "OriginalFilename", "ReplayLabelEx-release.dll"
             VALUE "ProductName", "ReplayLabelEx"
-            VALUE "ProductVersion", "1.5"
+            VALUE "ProductVersion", "1.6"
         END
     END
     BLOCK "VarFileInfo"

@@ -13,6 +13,7 @@
 #define isCL (SokuLib::mainMode == SokuLib::BATTLE_MODE_VSSERVER)
 #define isNV (SokuLib::mainMode == SokuLib::BATTLE_MODE_VSSERVER || SokuLib::mainMode == SokuLib::BATTLE_MODE_VSCLIENT)
 
+
 namespace Keys {
 	static bool p_order()
 	{
@@ -47,10 +48,14 @@ namespace Keys {
 		default:							return BattleMode[4];
 		}
 	}
-	static std::array<char, 2> GetScores()
+	static std::array<int, 2> ScoreCopy = {-1, -1};
+	static std::array<int, 2> GetScores()
 	{
-		const SokuLib::BattleManager& battleMgr = SokuLib::getBattleMgr();
-		return { battleMgr.leftCharacterManager.score, battleMgr.rightCharacterManager.score };//debug显示此处可能引起崩溃
+		//const SokuLib::BattleManager& battleMgr = SokuLib::getBattleMgr();
+		//return { battleMgr.leftCharacterManager.score, battleMgr.rightCharacterManager.score };//debug显示此处可能因use of free引起崩溃
+		//auto score = ScoreCopy;
+		//ScoreCopy = {0, 0};
+		return ScoreCopy;
 	}
 	static const std::array<std::wstring, 4> BattleResult = {
 		L"win", L"lose", L"noed", L"draw", 
@@ -207,6 +212,8 @@ static bool GetSubs(std::wstring& path, std::vector<std::wstring>& labels, std::
 	return true;
 }
 
+typedef DWORD(__stdcall* pGPPSA)(LPCSTR, LPCSTR, LPCSTR, LPSTR, DWORD, LPCSTR);
+static pGPPSA originalGPPSA;
 static DWORD WINAPI DummyGetPrivateProfileStringA(
 	__in_opt LPCSTR lpAppName,
 	__in_opt LPCSTR lpKeyName,
@@ -217,10 +224,10 @@ static DWORD WINAPI DummyGetPrivateProfileStringA(
 )
 {
 #ifdef _DEBUG
-	puts("entering! ");
+	puts("entering!");
 #endif
 	
-	DWORD result = GetPrivateProfileStringA(lpAppName, lpKeyName, lpDefault, lpReturnedString, nSize, lpFileName);
+	DWORD result = originalGPPSA(lpAppName, lpKeyName, lpDefault, lpReturnedString, nSize, lpFileName);
 	if (std::string("replay") != lpAppName || std::string("file_vs") != lpKeyName)
 	{
 		return result;
@@ -250,10 +257,38 @@ static DWORD WINAPI DummyGetPrivateProfileStringA(
 #ifdef _DEBUG
 	printf("replaced & saved as \n%s\n", lpReturnedString);
 #endif
+	Keys::ScoreCopy = {0, 0};
 	return result;
 }
 
-typedef DWORD(__stdcall*  pGPPSA)(LPCSTR, LPCSTR, LPCSTR, LPSTR, DWORD, LPCSTR);
+
+static void (SokuLib::BattleManager::* originalArenaStart)(void*);
+static void __fastcall initScoreCopy(SokuLib::BattleManager* This, DWORD _placeHolder, void* param)
+{
+#ifdef _DEBUG
+	printf("param %#x, score inited!\n", param);
+#endif
+	(This->*originalArenaStart)(param);
+	//Keys::ScoreCopy = { 0, 0 };
+
+	return;
+}
+
+static void (SokuLib::BattleManager::* originalHandleScore)();
+static void __fastcall saveScoreCopy(SokuLib::BattleManager* This)
+{
+	(This->*originalHandleScore)();
+	Keys::ScoreCopy = { This->leftCharacterManager.score, This->rightCharacterManager.score };
+#ifdef _DEBUG
+	const bool& LLose = This->leftCharacterManager.offset_0x574[0];
+	const bool& RLose = This->rightCharacterManager.offset_0x574[0];
+	if (!LLose && !RLose) return;
+	printf("score: %d %d ", This->leftCharacterManager.score, This->rightCharacterManager.score);
+	printf("Lose: %d %d\n", LLose, RLose);
+#endif
+	return;
+}
+
 extern "C" __declspec(dllexport) bool Initialize(HMODULE hMyModule, HMODULE hParentModule)
 {
 	wchar_t iniPath[MAX_PATH];
@@ -275,12 +310,15 @@ extern "C" __declspec(dllexport) bool Initialize(HMODULE hMyModule, HMODULE hPar
 	DWORD oldProtect;
 	//auto target = &SokuLib::DLL::kernel32.GetPrivateProfileStringA; //wrong
 	auto target = reinterpret_cast<pGPPSA*>(0x0085712C);			//specially thanks @Hagb Green
-	VirtualProtect(target, 4, PAGE_READWRITE, &oldProtect);
-	*target = DummyGetPrivateProfileStringA;
-	VirtualProtect(target, 4, oldProtect, &oldProtect);
+	VirtualProtect((PVOID)RDATA_SECTION_OFFSET, RDATA_SECTION_SIZE, PAGE_EXECUTE_WRITECOPY, &oldProtect);
+	//*target = DummyGetPrivateProfileStringA;
+	originalArenaStart = SokuLib::TamperDword(&SokuLib::VTable_BattleManager.onArenaStart, initScoreCopy);
+	originalHandleScore = SokuLib::TamperDword(&SokuLib::VTable_BattleManager.onRoundStart, saveScoreCopy);
+	originalGPPSA = SokuLib::TamperDword(target, DummyGetPrivateProfileStringA);
+	VirtualProtect((PVOID)RDATA_SECTION_OFFSET, RDATA_SECTION_SIZE, oldProtect, &oldProtect);
 	FlushInstructionCache(GetCurrentProcess(), nullptr, 0);
 #ifdef _DEBUG
-	printf("function at %#x hooked!\n", target);
+	printf("function at %#x %#x %#x hooked!\n", target, &SokuLib::VTable_BattleManager.onArenaStart, &SokuLib::VTable_BattleManager.onRoundStart);
 #endif // _DEBUG
 	return true;
 }
@@ -297,5 +335,5 @@ extern "C" int APIENTRY DllMain(HMODULE hModule, DWORD fdwReason, LPVOID lpReser
 
 extern "C" __declspec(dllexport) int getPriority()
 {
-	return -1;
+	return 0;
 }
